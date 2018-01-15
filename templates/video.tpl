@@ -3,11 +3,15 @@
 <div itemscope itemtype="http://schema.org/VideoObject">
 <div class="main">
 {include file="inc/logo.tpl"}
-<p id="download_intro">{t}You are going to download{/t}<i itemprop="name">
-    <a itemprop="url" id="video_link"
-        href="{$video->webpage_url}">
-{$video->title}</a></i>.
-</p>
+<div id="container">
+  <div id="yt-wrap">
+    <div id="ytPR"><img src=""/>
+      <h1>{$video->title}</h1>
+      <div class="filter"></div>
+    </div>
+    <div id="ytBG"><span id="ytClose"></span></div>
+  </div>
+</div>
 {if isset($video->thumbnail)}
     <img itemprop="thumbnailUrl" class="thumb" src="{$video->thumbnail}" alt="" />
 {/if}

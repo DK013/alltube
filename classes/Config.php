@@ -45,7 +45,7 @@ class Config
      *
      * @var bool
      */
-    public $convert = false;
+    public $convert = true;
 
     /**
      * avconv or ffmpeg binary path.
@@ -66,14 +66,14 @@ class Config
      *
      * @var bool
      */
-    public $stream = false;
+    public $stream = true;
 
     /**
      * Allow to remux video + audio?
      *
      * @var bool
      */
-    public $remux = false;
+    public $remux = true;
 
     /**
      * MP3 bitrate when converting (in kbit/s).
