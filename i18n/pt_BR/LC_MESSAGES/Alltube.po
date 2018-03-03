@@ -1,143 +1,149 @@
 msgid ""
-msgstr "Content-Type: text/plain; charset=UTF-8\n"
-
-#: templates/error.tpl:5
-msgid "An error occurred"
 msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: AllTube Download\n"
+"Language: pt-br\n"
 
 #: templates/error.tpl:6
 msgid "Please check the URL of your video."
-msgstr ""
+msgstr "Por favor, verifique a URL do vídeo."
 
 #: templates/playlist.tpl:5
 msgid "Videos extracted from"
-msgstr ""
+msgstr "Vídeos extraídos de"
 
 #: templates/playlist.tpl:7
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: templates/playlist.tpl:26 templates/password.tpl:10 templates/video.tpl:97
 #: templates/video.tpl:100 templates/index.tpl:19
 #: controllers/FrontController.php:265
 msgid "Download"
-msgstr ""
+msgstr "Download"
 
 #: templates/playlist.tpl:27
 msgid "More options"
-msgstr ""
+msgstr "Mais opções"
 
 #: templates/password.tpl:5
 msgid "This video is protected"
-msgstr ""
+msgstr "Esse vídeo está protegido"
 
 #: templates/password.tpl:6
 msgid "You need a password in order to download this video."
-msgstr ""
+msgstr "Você precisa da senha para baixar esse vídeo"
 
 #: templates/password.tpl:8
 msgid "Video password"
-msgstr ""
+msgstr "Senha do vídeo"
 
 #: templates/extractors.tpl:4 controllers/FrontController.php:159
 msgid "Supported websites"
-msgstr ""
+msgstr "Sites suportados"
 
 #: templates/video.tpl:6
 msgid "You are going to download"
-msgstr ""
+msgstr "Você está prestes a baixar"
 
 #: templates/video.tpl:24
 msgid "Available formats:"
-msgstr ""
+msgstr "Formatos disponíveis:"
 
 #: templates/video.tpl:29
 msgid "Generic formats"
-msgstr ""
+msgstr "Outros formatos"
 
 #: templates/video.tpl:32
 msgid "Best"
-msgstr ""
+msgstr "Melhor"
 
 #: templates/video.tpl:37
 msgid "Remux best video with best audio"
-msgstr ""
+msgstr "Remux do melhor vídeo com o melhor áudio"
 
 #: templates/video.tpl:41
 msgid "Worst"
-msgstr ""
+msgstr "Pior"
 
 #: templates/video.tpl:44
 msgid "Detailed formats"
-msgstr ""
-
-#: templates/video.tpl:86
-msgid "Convert into a custom format:"
-msgstr ""
-
-#: templates/video.tpl:92
-msgid "with"
-msgstr ""
-
-#: templates/video.tpl:94
-msgid "kbit/s audio"
-msgstr ""
+msgstr "Formatos detalhados"
 
 #: templates/inc/footer.tpl:4
 msgid "Code by"
-msgstr ""
+msgstr "Código por"
 
 #: templates/inc/footer.tpl:6
 msgid "Design by"
-msgstr ""
+msgstr "Design por"
 
 #: templates/inc/footer.tpl:12
 msgid "AllTube Download on Facebook"
-msgstr ""
+msgstr "AllTube Download no Facebook"
 
 #: templates/inc/footer.tpl:12
 msgid "Like us on Facebook"
-msgstr ""
+msgstr "Curtir no Facebook"
 
 #: templates/inc/footer.tpl:14
 msgid "Get the code"
-msgstr ""
+msgstr "Obtenha o código"
 
 #: templates/inc/footer.tpl:16
 msgid "Based on"
-msgstr ""
-
-#: templates/inc/header.tpl:4
-msgid "Switch language"
-msgstr ""
+msgstr "Baseado no"
 
 #: templates/inc/header.tpl:21
 msgid "Share on Twitter"
-msgstr ""
+msgstr "Compartilhe no Twitter"
 
 #: templates/inc/header.tpl:23
 msgid "Share on Facebook"
-msgstr ""
+msgstr "Compartilhe no Facebook"
 
 #: templates/index.tpl:8
 msgid "Copy here the URL of your video (Youtube, Dailymotion, etc.)"
-msgstr ""
+msgstr "Cole aqui a URL do vídeo (Youtube, Dailymotion, etc.)"
 
 #: templates/index.tpl:24
 msgid "Audio only (MP3)"
-msgstr ""
+msgstr "Apenas o áudio"
 
 #: templates/index.tpl:29
 msgid "See all supported websites"
-msgstr ""
+msgstr "Ver todos os sites suportados"
 
 #: templates/index.tpl:31
 msgid "Drag this to your bookmarks bar:"
-msgstr ""
+msgstr "Arraste para sua barra de favoritos"
 
 #: templates/index.tpl:32
 msgid "Bookmarklet"
-msgstr ""
+msgstr "Favoritar"
+
+#: templates/inc/header.tpl:4
+msgid "Switch language"
+msgstr "Alterar idioma"
+
+#: templates/error.tpl:5
+msgid "An error occurred"
+msgstr "Ocorreu um erro"
+
+#: templates/video.tpl:86
+msgid "Convert into a custom format:"
+msgstr "Converter para formato personalizado:"
+
+#: templates/video.tpl:94
+msgid "kbit/s audio"
+msgstr "kbit/s áudio"
+
+#: templates/video.tpl:92
+msgid "with"
+msgstr "com"
 
 #: classes/VideoDownload.php:114
 msgid "Wrong password"
@@ -162,14 +168,11 @@ msgid "Could not open fopen stream."
 msgstr ""
 
 #: controllers/FrontController.php:116
-msgid ""
-"Easily download videos from Youtube, Dailymotion, Vimeo and other websites."
+msgid "Easily download videos from Youtube, Dailymotion, Vimeo and other websites."
 msgstr ""
 
 #: controllers/FrontController.php:160
-msgid ""
-"List of all supported websites from which Alltube Download can extract video "
-"or audio files"
+msgid "List of all supported websites from which Alltube Download can extract video or audio files"
 msgstr ""
 
 #: controllers/FrontController.php:185
@@ -177,8 +180,7 @@ msgid "Password prompt"
 msgstr ""
 
 #: controllers/FrontController.php:186
-msgid ""
-"You need a password in order to download this video with Alltube Download"
+msgid "You need a password in order to download this video with Alltube Download"
 msgstr ""
 
 #: controllers/FrontController.php:261
@@ -204,3 +206,4 @@ msgstr ""
 #: controllers/FrontController.php:467
 msgid "Can't find URL of video."
 msgstr ""
+

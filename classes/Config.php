@@ -48,11 +48,32 @@ class Config
     public $convert = true;
 
     /**
+     * Enable advanced conversion mode.
+     *
+     * @var bool
+     */
+    public $convertAdvanced = false;
+
+    /**
+     * List of formats available in advanced conversion mode.
+     *
+     * @var array
+     */
+    public $convertAdvancedFormats = ['mp3', 'avi', 'flv', 'wav'];
+
+    /**
      * avconv or ffmpeg binary path.
      *
      * @var string
      */
     public $avconv = 'vendor/bin/ffmpeg';
+
+    /**
+     * Path to the directory that contains the phantomjs binary.
+     *
+     * @var string
+     */
+    public $phantomjsDir = 'vendor/bin/';
 
     /**
      * Disable URL rewriting.
@@ -100,14 +121,7 @@ class Config
     /**
      * Config constructor.
      *
-     * Available options:
-     * * youtubedl: youtube-dl binary path
-     * * python: Python binary path
-     * * avconv: avconv or ffmpeg binary path
-     * * params: Array of youtube-dl parameters
-     * * convert: Enable conversion?
-     *
-     * @param array $options Options
+     * @param array $options Options (see `config/config.example.yml` for available options)
      */
     public function __construct(array $options)
     {
@@ -118,11 +132,23 @@ class Config
                 }
             }
         }
-        if (getenv('CONVERT')) {
-            $this->convert = (bool) getenv('CONVERT');
-        }
-        if (getenv('PYTHON')) {
-            $this->python = getenv('PYTHON');
+        $this->getEnv();
+    }
+
+    /**
+     * Override options from environement variables.
+     * Supported environment variables: CONVERT, PYTHON, AUDIO_BITRATE.
+     *
+     * @return void
+     */
+    private function getEnv()
+    {
+        foreach (['CONVERT', 'PYTHON', 'AUDIO_BITRATE'] as $var) {
+            $env = getenv($var);
+            if ($env) {
+                $prop = lcfirst(str_replace('_', '', ucwords(strtolower($var), '_')));
+                $this->$prop = $env;
+            }
         }
     }
 

@@ -197,6 +197,12 @@ class VideoDownloadTest extends TestCase
                 'f4v',
                 'edgefcs.net',
             ],
+            [
+                'https://openload.co/embed/qTsjMEUtN4U', 'best[protocol^=http]',
+                'aup-the-lego-ninjago-movie-2017-1508463762.MP4.mp4-qTsjMEUtN4U',
+                'mp4',
+                'openload.co',
+            ],
         ];
     }
 
@@ -282,7 +288,7 @@ class VideoDownloadTest extends TestCase
         $this->assertObjectHasAttribute('ext', $info);
         $this->assertObjectHasAttribute('title', $info);
         $this->assertObjectHasAttribute('extractor_key', $info);
-        $this->assertObjectHasAttribute('formats', $info);
+        $this->assertObjectHasAttribute('format', $info);
     }
 
     /**
@@ -485,7 +491,7 @@ class VideoDownloadTest extends TestCase
     }
 
     /**
-     * Test getPlaylistArchiveStream function without avconv.
+     * Test getPlaylistArchiveStream function.
      *
      * @return void
      * @requires OS Linux
@@ -497,5 +503,34 @@ class VideoDownloadTest extends TestCase
             'best'
         );
         $this->assertStream($this->download->getPlaylistArchiveStream($video, 'best'));
+    }
+
+    /**
+     * Test getConvertedStream function without avconv.
+     *
+     * @param string $url    URL
+     * @param string $format Format
+     *
+     * @return void
+     * @dataProvider urlProvider
+     */
+    public function testGetConvertedStream($url, $format)
+    {
+        $this->assertStream($this->download->getConvertedStream($url, $format, 32, 'flv'));
+    }
+
+    /**
+     * Test getConvertedStream function with a M3U8 file.
+     *
+     * @param string $url    URL
+     * @param string $format Format
+     *
+     * @return void
+     * @expectedException Exception
+     * @dataProvider m3uUrlProvider
+     */
+    public function testGetConvertedStreamM3uError($url, $format)
+    {
+        $this->download->getConvertedStream($url, $format, 32, 'flv');
     }
 }

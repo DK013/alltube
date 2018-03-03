@@ -15,11 +15,20 @@ params:
 # True to enable audio conversion
 convert: false
 
+# True to enable advanced conversion mode
+convertAdvanced: false
+
+# List of formats available in advanced conversion mode
+convertAdvancedFormats: [mp3, avi, flv, wav]
+
 # Path to your avconv or ffmpeg binary
 avconv: vendor/bin/ffmpeg
 
 # avconv/ffmpeg logging level.
 avconvVerbosity: error
+
+# Path to the directory that contains the phantomjs binary.
+phantomjsDir: vendor/bin/
 
 # True to disable URL rewriting
 uglyUrls: false
