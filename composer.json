@@ -1,7 +1,7 @@
 {
   "name": "rudloff/alltube",
   "description": "HTML GUI for youtube-dl",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-only",
   "homepage": "http://alltubedownload.net/",
   "type": "project",
   "require": {
@@ -22,9 +22,10 @@
     "squizlabs/php_codesniffer": "~3.2.2",
     "phpunit/phpunit": "~6.5.2",
     "doctrine/instantiator": "~1.0.0",
-    "ffmpeg/ffmpeg": "3.4.1",
-    "rg3/youtube-dl": "2017.12.10",
-    "heroku/heroku-buildpack-php": "*"
+    "ffmpeg/ffmpeg": "~3.4.1",
+    "rg3/youtube-dl": "2018.01.21",
+    "heroku/heroku-buildpack-php": "*",
+    "anam/phantomjs-linux-x86-binary": "~2.1.1"
   },
   "extra": {
     "paas": {
@@ -38,10 +39,10 @@
       "type": "package",
       "package": {
         "name": "rg3/youtube-dl",
-        "version": "2017.12.10",
+        "version": "2018.01.21",
         "dist": {
           "type": "zip",
-          "url": "https://github.com/rg3/youtube-dl/archive/2017.12.10.zip"
+          "url": "https://github.com/rg3/youtube-dl/archive/2018.01.21.zip"
         }
       }
     },
@@ -83,7 +84,10 @@
   },
   "scripts": {
     "compile": "composer install --ignore-platform-reqs",
-    "update-locales": "tsmarty2c.php templates > i18n/template.pot",
+    "update-locales": [
+      "tsmarty2c.php templates > i18n/template.pot",
+      "xgettext --omit-header -j -o i18n/template.pot classes/* controllers/*"
+    ],
     "youtube-dl": "vendor/rg3/youtube-dl/youtube_dl/__main__.py"
   }
 }

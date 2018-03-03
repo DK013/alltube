@@ -17,7 +17,7 @@ class LocaleManager
      *
      * @var array
      */
-    private $supportedLocales = ['en_US', 'fr_FR', 'zh_CN', 'es_ES'];
+    private $supportedLocales = ['en_US', 'fr_FR', 'zh_CN', 'es_ES', 'pt_BR'];
 
     /**
      * Current locale.
@@ -47,6 +47,8 @@ class LocaleManager
         if (isset($cookieLocale)) {
             $this->setLocale(new Locale($cookieLocale));
         }
+        bindtextdomain('Alltube', __DIR__.'/../i18n/');
+        textdomain('Alltube');
     }
 
     /**

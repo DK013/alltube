@@ -11,16 +11,9 @@ You can ususally download the video by doing *File > Save to* or *ctrl + S*.
 ## How do I change config parameters?
 
 You need to create a YAML file called `config.yml` in the `config/` folder.
-Here are the parameters that you can set:
 
-* `youtubedl`: path to your youtube-dl binary
-* `python`: path to your python binary
-* `params`: an array of parameters to pass to youtube-dl
-* `convert`: true to enable audio conversion
-* `avconv`: path to your avconv or ffmpeg binary
-* `remux`: enable remux mode (experimental)
-
-See [`config.example.yml`](../config/config.example.yml) for default values.
+See [`config.example.yml`](../config/config.example.yml)
+for a list of parameters you can set and their default value.
 
 ## How do I enable audio conversion?
 
@@ -147,3 +140,17 @@ You then need to merge them together with a tool like ffmpeg.
 
 You can also enable the experimental remux mode
 that will merge the best video and the best audio format on the fly.
+
+## I want to convert videos to something other than MP3
+
+By default the `convert` option only allows converting to MP3,
+in order to keep things simple and ressources usage low.
+However, you can use the `convertAdvanced` option like this:
+
+```yaml
+convertAdvanced: true
+convertAdvancedFormats: [mp3, avi, flv, wav]
+```
+
+This will add new inputs on the download page
+that allow users to converted videos to other formats.

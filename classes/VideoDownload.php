@@ -22,6 +22,8 @@ class VideoDownload
     /**
      * VideoDownload constructor.
      *
+     * @param Config $config Config instance.
+     *
      * @throws \Exception If youtube-dl is missing
      * @throws \Exception If Python is missing
      */
@@ -32,6 +34,10 @@ class VideoDownload
         } else {
             $this->config = Config::getInstance();
         }
+        /*
+        We don't translate these exceptions because they always occur before Slim can catch them
+        so they will always go to the logs.
+         */
         if (!is_file($this->config->youtubedl)) {
             throw new \Exception("Can't find youtube-dl at ".$this->config->youtubedl);
         } elseif (!$this->checkCommand([$this->config->python, '--version'])) {
@@ -97,7 +103,7 @@ class VideoDownload
 
         $process = $this->getProcess($arguments);
         //This is needed by the openload extractor because it runs PhantomJS
-        $process->setEnv(['QT_QPA_PLATFORM'=>'offscreen']);
+        $process->setEnv(['PATH'=>$this->config->phantomjsDir]);
         $process->inheritEnvironmentVariables();
         $process->run();
         if (!$process->isSuccessful()) {
@@ -105,7 +111,7 @@ class VideoDownload
             if ($errorOutput == 'ERROR: This video is protected by a password, use the --video-password option') {
                 throw new PasswordException($errorOutput);
             } elseif (substr($errorOutput, 0, 21) == 'ERROR: Wrong password') {
-                throw new \Exception('Wrong password');
+                throw new \Exception(_('Wrong password'));
             } else {
                 throw new \Exception($errorOutput);
             }
@@ -247,24 +253,33 @@ class VideoDownload
     }
 
     /**
-     * Get a process that runs avconv in order to convert a video to MP3.
+     * Get a process that runs avconv in order to convert a video.
      *
-     * @param object $url Video object returned by youtube-dl
+     * @param object $video        Video object returned by youtube-dl
+     * @param int    $audioBitrate Audio bitrate of the converted file
+     * @param string $filetype     Filetype of the converted file
+     * @param bool   $audioOnly    True to return an audio-only file
      *
      * @throws \Exception If avconv/ffmpeg is missing
      *
-     * @return \Symfony\Component\Process\Process Process
+     * @return Process Process
      */
-    private function getAvconvMp3Process(\stdClass $video)
+    private function getAvconvProcess(\stdClass $video, $audioBitrate, $filetype = 'mp3', $audioOnly = true)
     {
         if (!$this->checkCommand([$this->config->avconv, '-version'])) {
-            throw(new \Exception('Can\'t find avconv or ffmpeg'));
+            throw(new \Exception(_('Can\'t find avconv or ffmpeg.')));
         }
 
         if ($video->protocol == 'rtmp') {
             $rtmpArguments = $this->getRtmpArguments($video);
         } else {
             $rtmpArguments = [];
+        }
+
+        if ($audioOnly) {
+            $videoArguments = ['-vn'];
+        } else {
+            $videoArguments = [];
         }
 
         $arguments = array_merge(
@@ -275,9 +290,11 @@ class VideoDownload
             $rtmpArguments,
             [
                 '-i', $video->url,
-                '-f', 'mp3',
-                '-b:a', $this->config->audioBitrate.'k',
-                '-vn',
+                '-f', $filetype,
+                '-b:a', $audioBitrate.'k',
+            ],
+            $videoArguments,
+            [
                 'pipe:1',
             ]
         );
@@ -306,15 +323,15 @@ class VideoDownload
     {
         $video = $this->getJSON($url, $format, $password);
         if (in_array($video->protocol, ['m3u8', 'm3u8_native'])) {
-            throw(new \Exception('Conversion of M3U8 files is not supported.'));
+            throw(new \Exception(_('Conversion of M3U8 files is not supported.')));
         }
 
-        $avconvProc = $this->getAvconvMp3Process($video);
+        $avconvProc = $this->getAvconvProcess($video, $this->config->audioBitrate);
 
         $stream = popen($avconvProc->getCommandLine(), 'r');
 
         if (!is_resource($stream)) {
-            throw new \Exception('Could not open popen stream.');
+            throw new \Exception(_('Could not open popen stream.'));
         }
 
         return $stream;
@@ -333,7 +350,7 @@ class VideoDownload
     public function getM3uStream(\stdClass $video)
     {
         if (!$this->checkCommand([$this->config->avconv, '-version'])) {
-            throw(new \Exception('Can\'t find avconv or ffmpeg'));
+            throw(new \Exception(_('Can\'t find avconv or ffmpeg.')));
         }
 
         $process = new Process(
@@ -351,7 +368,7 @@ class VideoDownload
 
         $stream = popen($process->getCommandLine(), 'r');
         if (!is_resource($stream)) {
-            throw new \Exception('Could not open popen stream.');
+            throw new \Exception(_('Could not open popen stream.'));
         }
 
         return $stream;
@@ -384,7 +401,7 @@ class VideoDownload
 
         $stream = popen($process->getCommandLine(), 'r');
         if (!is_resource($stream)) {
-            throw new \Exception('Could not open popen stream.');
+            throw new \Exception(_('Could not open popen stream.'));
         }
 
         return $stream;
@@ -417,7 +434,7 @@ class VideoDownload
         );
         $stream = popen($process->getCommandLine(), 'r');
         if (!is_resource($stream)) {
-            throw new \Exception('Could not open popen stream.');
+            throw new \Exception(_('Could not open popen stream.'));
         }
 
         return $stream;
@@ -441,7 +458,39 @@ class VideoDownload
         }
         $stream = fopen('playlist://'.implode(';', $playlistItems).'/'.$format, 'r');
         if (!is_resource($stream)) {
-            throw new \Exception('Could not fopen popen stream.');
+            throw new \Exception(_('Could not open fopen stream.'));
+        }
+
+        return $stream;
+    }
+
+    /**
+     * Get the stream of a converted video.
+     *
+     * @param string $url          URL of page
+     * @param string $format       Source format to use for the conversion
+     * @param int    $audioBitrate Audio bitrate of the converted file
+     * @param string $filetype     Filetype of the converted file
+     * @param string $password     Video password
+     *
+     * @throws \Exception If your try to convert and M3U8 video
+     * @throws \Exception If the popen stream was not created correctly
+     *
+     * @return resource popen stream
+     */
+    public function getConvertedStream($url, $format, $audioBitrate, $filetype, $password = null)
+    {
+        $video = $this->getJSON($url, $format, $password);
+        if (in_array($video->protocol, ['m3u8', 'm3u8_native'])) {
+            throw(new \Exception(_('Conversion of M3U8 files is not supported.')));
+        }
+
+        $avconvProc = $this->getAvconvProcess($video, $audioBitrate, $filetype, false);
+
+        $stream = popen($avconvProc->getCommandLine(), 'r');
+
+        if (!is_resource($stream)) {
+            throw new \Exception(_('Could not open popen stream.'));
         }
 
         return $stream;
